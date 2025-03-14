@@ -41,7 +41,7 @@ nav a:hover {
 /* Sub-header Styling */
 .sub-header {
     font-size: 1.8em;
-    color: #0073e6;
+    color: #9abfe4;
     margin-top: 20px;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -75,7 +75,7 @@ ul {
 }
 
 ul li {
-    background: #e3f2fd; /* Soft blue background */
+    background: #b19bb7; /* Soft blue background */
     padding: 10px;
     margin: 5px 0;
     border-radius: 5px;
