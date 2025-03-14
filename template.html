@@ -1,123 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Media Data Visualizations</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media Visualization</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <svg width="800" height="400"></svg>
-    <svg width="800" height="400" style="margin-top: 450px;"></svg> <!-- For the Line Plot -->
-    
-    <script>
-        // Load the summarized data for Part 2.2 (Side-by-Side Bar Plot) and Part 2.3 (Line Plot)
-        
-        // Part 2.2 - Side-by-Side Bar Plot
-        d3.csv("SocialMediaAvg.csv").then(function(data) {
-            data.forEach(function(d) {
-                d.AvgLikes = +d.AvgLikes;
-            });
 
-            // Define the dimensions and margins for the SVG
-            const width = 800, height = 400;
-            const margin = { top: 20, right: 30, bottom: 40, left: 40 };
-            const svg = d3.select("svg").attr("width", width).attr("height", height);
+  <div id="chart1"></div> <!-- For Part 2.2 Side-by-Side Bar Plot -->
+  <div id="chart2"></div> <!-- For Part 2.3 Line Plot -->
 
-            // Set up scales for Part 2.2
-            const platforms = [...new Set(data.map(d => d.Platform))];
-            const postTypes = [...new Set(data.map(d => d.PostType))];
-            const x0 = d3.scaleBand().domain(platforms).range([margin.left, width - margin.right]).padding(0.1);
-            const x1 = d3.scaleBand().domain(postTypes).range([0, x0.bandwidth()]).padding(0.05);
-            const y = d3.scaleLinear().domain([0, d3.max(data, d => d.AvgLikes)]).nice().range([height - margin.bottom, margin.top]);
-            const color = d3.scaleOrdinal().domain(postTypes).range(["#1f77b4", "#ff7f0e", "#2ca02c"]);
+  <script>
+    // Load the original data from SocialMedia.csv
+    d3.csv("SocialMedia.csv").then(function(data) {
 
-            // Add axes for Part 2.2
-            svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x0));
-            svg.append("g").attr("transform", `translate(${margin.left},0)`).call(d3.axisLeft(y));
+      // Convert numerical columns into numbers
+      data.forEach(function(d) {
+        d.Likes = +d.Likes;
+        d.Date = new Date(d.Date); // Convert Date string to Date object
+      });
 
-            // Group the data by Platform and PostType for Part 2.2
-            const platformGroups = d3.nest().key(d => d.Platform).entries(data);
-            platformGroups.forEach(function(platformGroup) {
-                const xPlatform = x0(platformGroup.key);
-                svg.selectAll(".bar")
-                    .data(platformGroup.values)
-                    .enter()
-                    .append("rect")
-                    .attr("class", "bar")
-                    .attr("x", d => xPlatform + x1(d.PostType))
-                    .attr("y", d => y(d.AvgLikes))
-                    .attr("width", x1.bandwidth())
-                    .attr("height", d => height - margin.bottom - y(d.AvgLikes))
-                    .attr("fill", d => color(d.PostType));
-            });
-
-            // Add the legend for Part 2.2
-            const legend = svg.append("g").attr("transform", `translate(${width - 150}, ${margin.top})`);
-            postTypes.forEach(function(type, i) {
-                legend.append("rect")
-                    .attr("x", 0)
-                    .attr("y", i * 20)
-                    .attr("width", 10)
-                    .attr("height", 10)
-                    .attr("fill", color(type));
-
-                legend.append("text")
-                    .attr("x", 20)
-                    .attr("y", i * 20 + 10)
-                    .text(type)
-                    .attr("alignment-baseline", "middle");
-            });
+      // Create SocialMediaAvg.csv (Average Likes by Platform and PostType)
+      const socialMediaAvg = d3.rollup(data, v => d3.mean(v, d => d.Likes), d => d.Platform, d => d.PostType);
+      
+      // Flatten the data into an array for the bar chart
+      const avgData = [];
+      socialMediaAvg.forEach((postTypes, platform) => {
+        postTypes.forEach((avgLikes, postType) => {
+          avgData.push({ Platform: platform, PostType: postType, AvgLikes: avgLikes.toFixed(2) });
         });
+      });
 
-        // Part 2.3 - Line Plot for Date vs AvgLikes
-        d3.csv("SocialMediaTime.csv").then(function(data) {
-            data.forEach(function(d) {
-                d.AvgLikes = +d.AvgLikes;
-                d.Date = new Date(d.Date); // Convert Date to a JavaScript Date object
-            });
+      // Part 2.2: Side-by-Side Bar Plot
+      createSideBySideBarPlot(avgData);
 
-            // Define the dimensions and margins for the Line Plot
-            const width = 800, height = 400;
-            const margin = { top: 20, right: 30, bottom: 40, left: 40 };
-            const svg = d3.select("svg:nth-of-type(2)").attr("width", width).attr("height", height);
+      // Create SocialMediaTime.csv (Average Likes by Date)
+      const socialMediaTime = d3.rollup(data, v => d3.mean(v, d => d.Likes), d => d.Date);
+      
+      // Flatten the data into an array for the line plot
+      const timeData = [];
+      socialMediaTime.forEach((avgLikes, date) => {
+        timeData.push({ Date: date.toLocaleDateString(), AvgLikes: avgLikes.toFixed(2) });
+      });
 
-            // Set up scales for Part 2.3
-            const x = d3.scaleTime().domain(d3.extent(data, d => d.Date)).range([margin.left, width - margin.right]);
-            const y = d3.scaleLinear().domain([0, d3.max(data, d => d.AvgLikes)]).nice().range([height - margin.bottom, margin.top]);
+      // Part 2.3: Line Plot
+      createLinePlot(timeData);
+    });
 
-            // Add axes for Part 2.3
-            svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x).ticks(d3.timeDay.every(1)).tickFormat(d3.timeFormat("%m/%d/%Y")).style("text-anchor", "end").attr("transform", "rotate(-25)"));
-            svg.append("g").attr("transform", `translate(${margin.left},0)`).call(d3.axisLeft(y));
+    // Function to create the Side-by-Side Bar Plot (Part 2.2)
+    function createSideBySideBarPlot(data) {
+      const width = 800, height = 400, margin = { top: 20, right: 30, bottom: 40, left: 40 };
+      const svg = d3.select("#chart1").append("svg").attr("width", width).attr("height", height);
+      const x0 = d3.scaleBand().domain([...new Set(data.map(d => d.Platform))]).range([margin.left, width - margin.right]).padding(0.1);
+      const x1 = d3.scaleBand().domain([...new Set(data.map(d => d.PostType))]).range([0, x0.bandwidth()]).padding(0.05);
+      const y = d3.scaleLinear().domain([0, d3.max(data, d => +d.AvgLikes)]).nice().range([height - margin.bottom, margin.top]);
+      const color = d3.scaleOrdinal().domain([...new Set(data.map(d => d.PostType))]).range(["#1f77b4", "#ff7f0e", "#2ca02c"]);
 
-            // Create a line generator function for the line plot
-            const line = d3.line()
-                .x(d => x(d.Date))
-                .y(d => y(d.AvgLikes))
-                .curve(d3.curveNatural); // Smooth curve
+      svg.append("g").selectAll("g")
+        .data(data)
+        .enter()
+        .append("g")
+        .attr("transform", d => `translate(${x0(d.Platform)},0)`)
+        .append("rect")
+        .attr("x", d => x1(d.PostType))
+        .attr("y", d => y(d.AvgLikes))
+        .attr("width", x1.bandwidth())
+        .attr("height", d => y(0) - y(d.AvgLikes))
+        .attr("fill", d => color(d.PostType));
 
-            // Draw the line for Part 2.3
-            svg.append("path")
-                .data([data])
-                .attr("fill", "none")
-                .attr("stroke", "#ff7f0e")
-                .attr("stroke-width", 2)
-                .attr("d", line);
+      svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(x0));
+      
+      svg.append("g").attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y));
 
-            // Optional: Add labels for the axes
-            svg.append("text")
-                .attr("x", width / 2)
-                .attr("y", height - 10)
-                .attr("text-anchor", "middle")
-                .text("Date");
+      // Add labels
+      svg.append("text").attr("x", width / 2).attr("y", height - 10).attr("text-anchor", "middle").text("Platform");
+      svg.append("text").attr("x", -height / 2).attr("y", 10).attr("text-anchor", "middle").attr("transform", "rotate(-90)").text("Average Likes");
+    }
 
-            svg.append("text")
-                .attr("x", -height / 2)
-                .attr("y", 15)
-                .attr("transform", "rotate(-90)")
-                .attr("text-anchor", "middle")
-                .text("Average Likes");
-        });
-    </script>
+    // Function to create the Line Plot (Part 2.3)
+    function createLinePlot(data) {
+      const width = 800, height = 400, margin = { top: 20, right: 30, bottom: 40, left: 40 };
+      const svg = d3.select("#chart2").append("svg").attr("width", width).attr("height", height);
+      const x = d3.scaleBand().domain(data.map(d => d.Date)).range([margin.left, width - margin.right]).padding(0.1);
+      const y = d3.scaleLinear().domain([0, d3.max(data, d => +d.AvgLikes)]).nice().range([height - margin.bottom, margin.top]);
+      const line = d3.line().x(d => x(d.Date)).y(d => y(d.AvgLikes)).curve(d3.curveNatural);
+
+      svg.append("path").data([data]).attr("class", "line").attr("d", line).attr("fill", "none").attr("stroke", "steelblue").attr("stroke-width", 2);
+
+      svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(x));
+
+      svg.append("g").attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y));
+
+      // Add labels
+      svg.append("text").attr("x", width / 2).attr("y", height - 10).attr("text-anchor", "middle").text("Date");
+      svg.append("text").attr("x", -height / 2).attr("y", 10).attr("text-anchor", "middle").attr("transform", "rotate(-90)").text("Average Likes");
+    }
+  </script>
+
 </body>
 </html>
