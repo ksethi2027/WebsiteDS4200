@@ -1,62 +1,90 @@
-/* Custom Font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-
+/* General Styles */
 body {
-    font-family: 'Poppins', sans-serif; /* Custom font */
-    background-color: #f4f4f4;
+    font-family: 'Poppins', sans-serif;  /* Custom font */
+    background-color: #f8f9fa;  /* Light gray background */
     color: #333;
     text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 /* Header Styling */
 header {
-    background: #0073e6;
-    padding: 10px;
+    background: linear-gradient(90deg, #0073e6, #00b4d8); /* Gradient for a modern look */
+    padding: 20px;
     color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 2em;
+    margin: 0;
 }
 
 /* Navigation Styling */
+nav {
+    margin-top: 10px;
+}
+
 nav a {
     color: white;
     text-decoration: none;
-    margin: 0 10px;
-    font-weight: 600;
+    font-weight: bold;
+    margin: 0 15px;
+    transition: color 0.3s ease-in-out;
 }
 
 nav a:hover {
-    color: #ffcc00; /* Custom hover effect */
+    color: #ffdd57; /* Warm accent color */
 }
 
-/* Image Styling - Centered */
-img {
-    max-width: 80%;
-    height: auto;
-    display: block;
-    margin: 20px auto;
-    border-radius: 10px; /* Slight rounding for a polished look */
-}
-
-/* Custom Margins and Layout Adjustments */
-.container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Sub-header for About Page */
+/* Sub-header Styling */
 .sub-header {
-    font-size: 1.5rem;
-    color: #555;
-    text-align: center;
+    font-size: 1.8em;
+    color: #0073e6;
+    margin-top: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Section Content */
+section {
+    background: white;
+    padding: 30px;
+    margin: 20px auto;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+/* Image Styling */
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
     margin-top: 10px;
-    font-weight: 600;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* List Styling */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    background: #e3f2fd; /* Soft blue background */
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
 }
 
 /* Footer Styling */
 footer {
     margin-top: 20px;
     font-size: 14px;
-    background: #0073e6;
-    color: white;
+    color: #555;
     padding: 10px;
 }
