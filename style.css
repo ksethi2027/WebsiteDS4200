@@ -1,24 +1,62 @@
+/* Custom Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif; /* Custom font */
     background-color: #f4f4f4;
     color: #333;
     text-align: center;
 }
+
+/* Header Styling */
 header {
     background: #0073e6;
     padding: 10px;
     color: white;
 }
+
+/* Navigation Styling */
 nav a {
     color: white;
     text-decoration: none;
     margin: 0 10px;
+    font-weight: 600;
 }
+
+nav a:hover {
+    color: #ffcc00; /* Custom hover effect */
+}
+
+/* Image Styling - Centered */
 img {
-    max-width: 100%;
+    max-width: 80%;
     height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px; /* Slight rounding for a polished look */
 }
+
+/* Custom Margins and Layout Adjustments */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Sub-header for About Page */
+.sub-header {
+    font-size: 1.5rem;
+    color: #555;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+/* Footer Styling */
 footer {
     margin-top: 20px;
     font-size: 14px;
+    background: #0073e6;
+    color: white;
+    padding: 10px;
 }
