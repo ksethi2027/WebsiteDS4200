@@ -1,16 +1,16 @@
-/* General Styles */
+
 body {
-    font-family: 'Poppins', sans-serif;  /* Custom font */
-    background-color: #f8f9fa;  /* Light gray background */
+    font-family: 'Poppins', sans-serif; 
+    background-color: #f8f9fa; 
     color: #333;
     text-align: center;
     margin: 0;
     padding: 0;
 }
 
-/* Header Styling */
+
 header {
-    background: linear-gradient(90deg, #0073e6, #00b4d8); /* Gradient for a modern look */
+    background: linear-gradient(90deg, #0073e6, #00b4d8); 
     padding: 20px;
     color: white;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -21,7 +21,7 @@ header h1 {
     margin: 0;
 }
 
-/* Navigation Styling */
+
 nav {
     margin-top: 10px;
 }
@@ -35,10 +35,10 @@ nav a {
 }
 
 nav a:hover {
-    color: #ffdd57; /* Warm accent color */
+    color: #ffdd57; 
 }
 
-/* Sub-header Styling */
+
 .sub-header {
     font-size: 1.8em;
     color: #9abfe4;
@@ -47,7 +47,6 @@ nav a:hover {
     letter-spacing: 1px;
 }
 
-/* Section Content */
 section {
     background: white;
     padding: 30px;
@@ -59,7 +58,6 @@ section {
     text-align: left;
 }
 
-/* Image Styling */
 img {
     max-width: 100%;
     height: auto;
@@ -68,20 +66,18 @@ img {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* List Styling */
 ul {
     list-style-type: none;
     padding: 0;
 }
 
 ul li {
-    background: #b19bb7; /* Soft blue background */
+    background: #b19bb7; 
     padding: 10px;
     margin: 5px 0;
     border-radius: 5px;
 }
 
-/* Footer Styling */
 footer {
     margin-top: 20px;
     font-size: 14px;
